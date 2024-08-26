@@ -1,0 +1,19 @@
+
+- list: recon_binaries
+  items: [whoami, uname, hostname, id]
+
+- list: network_binaries
+  items: [curl, ping, wget, netstat, nmap, pwncat, nc]
+
+- macro: is_container
+  condition: (container.id != host)
+
+- rule: recon_command
+  desc: Detect execution of recon command in containers
+  condition: >
+    evt.type = execve and
+    proc.name = whoami and is_container
+  output: >
+    "Recon command run detected (user=%user.name user_uid=%user.uid command=%proc.cmdline container_id=%container.id container_name=%container.name)"
+  priority: WARNING
+  tags: [process, command]

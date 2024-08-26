@@ -1,0 +1,22 @@
+customRules:
+  restrict_tag.yaml: |
+      - macro: container_started
+        condition: >
+          ((evt.type = container or
+           (spawned_process and proc.vpid=1)))
+
+      - list: namespace_system
+        items: [kube-system, cilium-system]
+
+      - macro: namespace_allowed_to_use_latest_tag
+        condition: not (k8s.ns.name in (namespace_system))
+
+      - rule: Container with latest tag outside kube-system and cilium-system
+        desc: Detects containers with the "latest" tag started in namespaces other than kube-system and cilium-system
+        condition: >
+          container_started
+          and container.image endswith "latest"
+          and namespace_allowed_to_use_latest_tag
+        output: "Container with 'latest' tag detected outside kube-system and cilium-system (user=%user.name container_id=%container.id image=%container.image)"
+        priority: WARNING
+        tags: [k8s, container, latest_tag]
