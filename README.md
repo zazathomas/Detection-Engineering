@@ -18,3 +18,5 @@ Continuous Improvement: Regularly update and refine detection rules based on new
 Falco Rules: Deploy custom rules to your Falco setup to start monitoring Kubernetes and other containerized workloads for suspicious activities.
 Sigma Rules: Convert Sigma rules into your SIEM-compatible format and integrate them into your security monitoring pipeline.
 Custom Scripts: Use the additional detection engineering resources to enhance your security posture across cloud-native infrastructure.
+
+.
